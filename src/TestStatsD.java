@@ -11,20 +11,36 @@ public class TestStatsD {
 
 		StatsDClient statsd = new NonBlockingStatsDClient(PREFIX,
 				SERVER_LOCATION, PORT);
-		DummyStatsDServer server = new DummyStatsDServer(PORT);
+		DummyStatsDServer server = new DummyStatsDServer(PORT, PREFIX);
 
 		statsd.recordGaugeValue("baz", 100);
 		statsd.incrementCounter("hi");
 		statsd.incrementCounter("foo");
-		statsd.incrementCounter("bar");
 		statsd.incrementCounter("foo");
+		statsd.incrementCounter("foo");
+		statsd.incrementCounter("foo");
+		statsd.incrementCounter("foo");
+		statsd.incrementCounter("foo");
+		statsd.incrementCounter("foo");
+		statsd.incrementCounter("foo");
+		statsd.incrementCounter("foo");
+		statsd.incrementCounter("foo");
+		statsd.incrementCounter("foo");
+		statsd.incrementCounter("bar");
+		statsd.incrementCounter("bar");
+		statsd.incrementCounter("bar");
+		statsd.incrementCounter("bar");
 		statsd.recordExecutionTime("bag", 25);
 		statsd.recordSetEvent("qux", "one");
 
 		server.waitForMessage();
 
-		for (String s : server.messagesReceived()) {
-			System.out.println(s);
+//		for (String s : server.messagesReceived()) {
+//			System.out.println(s);
+//		}
+		
+		for (CountObject count : server.countMessages()) {
+			System.out.println(count.getTag() + ": " + count.getCount());
 		}
 
 		server.stop();
